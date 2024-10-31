@@ -2,7 +2,7 @@
 
 Commands:
 
-create parking lot:
+create parking lot:\n
       create_parking_lot <PARKING_NAME> <FLOORS_COUNT> <SLOTS_COUNT>
 
 register vehicle:
