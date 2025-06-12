@@ -1,35 +1,70 @@
 public class Slot {
 
-    private String type;
-    private boolean avail;
+    private VehicleType type;
     private Vehicle vehicle;
+    private  int floorId;
+    private boolean isActive;
 
-    public Slot(String type) {
+    private int id;
+
+  
+    public Slot(VehicleType type,int floorId,int id) {
         this.type = type;
-        this.avail = true;
         this.vehicle = null;
+        this.floorId = floorId;
+        this.id = id;
+        this.isActive = true;
     }
 
-    public String getType() {
+    public int getFloorId() {
+        return floorId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
+    public VehicleType getType() {
         return this.type;
     }
 
-    public boolean isAvail() {
-        return this.avail;
+    public boolean isAvailable() {
+        return this.vehicle == null;
     }
 
     public Vehicle getVehicle() {
         return this.vehicle;
     }
 
-    public void bookSlot(Vehicle vehicle) {
+    public void park(Vehicle vehicle) {
         this.vehicle = vehicle;
-        this.avail = false;
     }
 
-    public void checkoutSlot() {
+    public void checkout() {
         this.vehicle = null;
-        this.avail = true;
+    }
+
+    public void deactivate()
+    {
+        if(isAvailable())
+            this.isActive = false;
+        else 
+            System.out.println(" A Vehicle is Parked! ");
+
+    }
+
+    public void activate()
+    {
+        if(isActive)
+            System.out.println(" Already Active! ");
+        else
+            this.isActive = true;
+    }
+
+    public boolean isActive()
+    {
+        return this.isActive;
     }
 
 }

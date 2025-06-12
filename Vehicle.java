@@ -1,17 +1,17 @@
-public class Vehicle {
+public class Vehicle{
 
-    private String type;
+    private VehicleType type;
     private String color;
     private String registerNumber;
 
-    public Vehicle(String type, String color, String registerNumber) {
+    public Vehicle(VehicleType type, String color, String registerNumber) {
         this.type = type;
         this.color = color;
         this.registerNumber = registerNumber;
 
     }
 
-    public String getType() {
+    public VehicleType getType() {
         return this.type;
     }
 

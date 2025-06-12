@@ -1,13 +1,23 @@
 public class Ticket {
 
-    private static int idGenerater;
+    private static int idGenerator;
     private int id;
 
-    private Slot slot;
 
-    public Ticket(Slot slot) {
-        id = ++idGenerater;
+    private boolean isActive;
+    private Vehicle vehicle;
+    private  Slot slot;
+
+    public Ticket(Slot slot,Vehicle vehicle) {
+        id = ++idGenerator;
+        this.isActive = true;
+        this.vehicle = vehicle;
         this.slot = slot;
+    }
+
+    public boolean isActive()
+    {
+        return this.isActive;
     }
 
     public int getId() {
@@ -17,5 +27,19 @@ public class Ticket {
     public Slot getSlot() {
         return this.slot;
     }
+    public Vehicle getVehicle()
+    {
+        return this.vehicle;
+    }
+
+
+    public void expire()
+    {
+        this.isActive = false;
+        slot.checkout();
+    }
+
+
+
 
 }

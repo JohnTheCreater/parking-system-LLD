@@ -1,68 +1,135 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        ParkingLot parkingLot = null;
-        do {
-            System.out.println("PARKING SYSTEM !");
-            System.out.println(
-                    "---------------------------------------------------------------------------------------------");
-            System.out.println("Commands:::: \n");
-            System.out.println("create_parking_lot <PARKING_NAME> <FLOORS_COUNT> <SLOTS_COUNT>");
-            System.out.println("register_vehicle <VEHICLE_TYPE> <REG_NUMBER> <COLOR>");
-            System.out.println("park_vehicle <REG_NUMBER>");
-            System.out.println("unpark_vehicle <TICKET_ID>");
-            System.out.println(
-                    "display <DISPLAY_TYPE> <VEHICLE_TYPE> (display type possible values 1.free_count 2.free_slots 3.occupied_slots )");
-            System.out.println("exit");
-            System.out.println(
-                    "---------------------------------------------------------------------------------------------");
-            System.out.print("command: ");
+        System.out.println("Initializing the Parking Lot!");
+        System.out.print("How many floors in the parking lot ? ");
+        int floorsCount = scan.nextInt();
+        int i = 0;
+        List<List<VehicleType>> slotTypes = new ArrayList<>();
+        while(i < floorsCount)
+        {
+            System.out.println(" Slot types for floor "+i);
+            List<VehicleType> floorSlot = new ArrayList<>();
+            boolean flag = true; 
+            do{
+                System.out.println(VehicleType.BIKE.ordinal()+". BIKE");
+                System.out.println(VehicleType.CAR.ordinal()+". CAR");
+                System.out.println(VehicleType.TRUCK.ordinal()+". TRUCK");
+                System.out.println(VehicleType.ELECTRIC.ordinal()+". ELECTRIC");
+                System.out.println(VehicleType.SUV.ordinal()+". SUV");
+                System.out.println(VehicleType.values().length+". back");
+                int option = scan.nextInt();
 
-            String input = scan.nextLine();
-            String[] commands = input.split(" ");
+                switch(option)
+                {
+                    case 0:
+                        floorSlot.add(VehicleType.BIKE);
+                        break;
+                    case 1:
+                        floorSlot.add(VehicleType.CAR);
+                        break;
+                    case 2:
+                        floorSlot.add(VehicleType.TRUCK);
+                        break;
+                    case 3:
+                        floorSlot.add(VehicleType.ELECTRIC);
+                        break;
+                    case 4:
+                        floorSlot.add(VehicleType.SUV);
+                        break;
+                    case 5:
+                        flag = false;
+                        break;
+                    default:
+                        System.out.println("Invalid option");
 
-            switch (commands[0]) {
-                case "create_parking_lot":
-                    if (commands.length == 4)
-                        parkingLot = new ParkingLot(commands[1], Integer.parseInt(commands[2]),
-                                Integer.parseInt(commands[3]), scan);
+                }
+
+
+            }while(flag);
+            slotTypes.add(floorSlot);
+            i++;
+        }
+        ParkingLot parkingLot = ParkingLot.getInstance(floorsCount, slotTypes);
+       StringBuilder vehicleTypesString = new StringBuilder("(");
+for (VehicleType type : VehicleType.values()) {
+    vehicleTypesString.append(type.ordinal()).append(".").append(type.name()).append(" ");
+}
+vehicleTypesString.append(")");
+        do
+        {
+            System.out.println("Main Menu !");
+            System.out.println("1.register");
+            System.out.println("2.park");
+            System.out.println("3.unpark");
+            System.out.println("4.print free slots count");
+            System.out.println("5.print free slots ");
+            System.out.println("6.print occupied slots");
+            System.out.println("7.print all slots");
+            System.out.println("8.exit");
+            int option = scan.nextInt();
+            scan.nextLine();
+            String registerNumber;
+            int type;
+
+            switch(option)
+            {
+                case 1:
+                    System.out.println("Enter Vehicle Type "+vehicleTypesString+" :");
+                    int vehicleType = scan.nextInt();
+                    scan.nextLine();
+                    System.out.print("Enter register Number : ");
+                    registerNumber = scan.nextLine();
+                    System.out.print("Enter Color : ");
+                    String color = scan.nextLine();
+                    parkingLot.registerVehicle(VehicleType.values()[vehicleType], registerNumber, color);
                     break;
-                case "register_vehicle":
-                    if (commands.length == 4 && parkingLot != null)
-                        parkingLot.registerVehicle(commands[1], commands[2], commands[3]);
+                case 2:
+                    System.out.print("Enter register Number: ");
+                    registerNumber = scan.nextLine();
+                    parkingLot.parkVehicle(registerNumber);
                     break;
-                case "park_vehicle":
-                    if (commands.length == 2 && parkingLot != null)
-                        parkingLot.parkVehicle(commands[1]);
+                case 3:
+                    System.out.print("Enter ticket id: ");
+                    int ticketId = scan.nextInt();
+                    scan.nextLine();
+                    parkingLot.unParkVehicle(ticketId);
                     break;
-                case "unpark_vehicle":
-                    if (commands.length == 2 && parkingLot != null)
-                        parkingLot.unParkVehicle(Integer.parseInt(commands[1]));
+                case 4:
+                    System.out.println("Enter Vehicle type "+vehicleTypesString+": ");
+                    type = scan.nextInt();
+                    scan.nextLine();
+                    parkingLot.printFreeSlotCount(VehicleType.values()[type]);
                     break;
-                case "display":
-                    switch (commands[1]) {
-                        case "free_count":
-                            parkingLot.printFreeCount(commands[2]);
-                            break;
-                        case "free_slots":
-                            parkingLot.printFreeSlots(commands[2]);
-                            break;
-                        case "occupied_slots":
-                            parkingLot.printOccupiedSlots(commands[2]);
-                            break;
-                    }
+                case 5:
+                    System.out.println("Enter Vehicle type "+vehicleTypesString+": ");
+                    type = scan.nextInt();
+                    scan.nextLine();
+                    parkingLot.printFreeSlots(VehicleType.values()[type]);
                     break;
-                case "exit":
-                    return;
-                default:
-                    System.out.println("invalid input!");
+                case 6:
+                System.out.println("Enter Vehicle type "+vehicleTypesString+": ");
+                    type = scan.nextInt();
+                    scan.nextLine();
+                    parkingLot.printOccupiedSlots(VehicleType.values()[type]);
                     break;
+                case 7:
+                    parkingLot.printAllSlots();
+                    break;
+                case 8:
+                    System.exit(0);
+
             }
 
-        } while (true);
+        }while(true);
+
+      
+        
     }
 
 }
